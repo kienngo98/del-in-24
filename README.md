@@ -11,3 +11,7 @@ Users can sign up with a unique username and password. After that they can share
 - Flutter
 
 # Back-end stacks
+
+# Installation
+- 1. Install Flutter: https://flutter.dev/docs/get-started/install
+- 2. Run Flutter in Chrome: https://flutter.dev/docs/get-started/web
