@@ -21,7 +21,9 @@ export class AppComponent {
         this.dataService.currentUser = {
           email: user.email,
           uid: user.uid,
-          photoURL: user.photoURL
+          photoURL: user.photoURL,
+          displayName: user.displayName,
+          phoneNumber: user.phoneNumber
         }
         this.toast.presentSimpleToast('You have logged in');
         if (!this.router.url.includes('/app')) this.router.navigate(['/app/chat']);

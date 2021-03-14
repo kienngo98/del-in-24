@@ -45,9 +45,7 @@ export class SignupPage implements OnInit {
       // Add new user data to [/users/] collection
       return this.fireStore.collection('users').doc(res.user.uid).set({
         email: res.user.email,
-        // displayName: res.user.displayName,
-        // phoneNumber: res.user.phoneNumber,
-        // photoURL: res.user.photoURL,
+        contacts: [],
         sharedFiles: [],
         receivedFiles: [],
       })

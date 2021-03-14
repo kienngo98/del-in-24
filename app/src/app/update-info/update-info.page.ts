@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-// import { AngularFirestore } from '@angular/fire/firestore';
 import { DataService } from '../services/data.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { FirebaseApp } from '@angular/fire';
+import { LoadService } from '../services/load.service';
 
 @Component({
   selector: 'app-update-info',
@@ -21,7 +21,8 @@ export class UpdateInfoPage implements OnInit {
     // private fireStore: AngularFirestore,
     private modalCtrl: ModalController,
     public dataService: DataService,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    public loader: LoadService
   ) {}
 
   ngOnInit() {
@@ -51,6 +52,8 @@ export class UpdateInfoPage implements OnInit {
     const file = event.target.files[0];
     const path = `avatars/${this.dataService.currentUser.email}/`;
     const ref = this.storage.ref(path);
+
+    this.loader.presentLoading(10000, 'Uploading image ...');
     return ref.put(file)
       .then(() => {
         const imageRef = this.storage.ref(path);
@@ -60,6 +63,7 @@ export class UpdateInfoPage implements OnInit {
 
           // Update current user's photoURL
           this.firebase.auth().currentUser.updateProfile({ photoURL: url }).then(() => {
+            this.loader.dismissLoading();
             imageUrlSub.unsubscribe();
           });
 
@@ -67,20 +71,10 @@ export class UpdateInfoPage implements OnInit {
           // return this.fireStore.doc(`users/${this.dataService.currentUser.uid}`).update({
           //   photoURL: url
           // })
-          // .then(() => {
-          //   imageUrlSub.unsubscribe();
-          // })
-          // .catch(err => {
-          //   console.log(err);
-          // });
         });
       })
       .catch(err => {
         console.log(err);
       });
-  }
-
-  setNewimage() {
-
   }
 }

@@ -4,6 +4,12 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class DataService {
-  public currentUser: any = { email: '', photoURL: '', uid: ''};
+  public currentUser: any = { 
+    email: '', 
+    photoURL: '', 
+    uid: '',
+    displayName: '',
+    phoneNumber: ''
+  };
   constructor() { }
 }
