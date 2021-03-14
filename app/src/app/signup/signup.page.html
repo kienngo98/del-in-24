@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      &nbsp; Create an account
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissSignupForm()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-input 
+      [(ngModel)]="email" 
+      placeholder="email" 
+      name="custom" 
+      type="email" 
+      autocomplete="bro fuck off" 
+      enterkeyhint="go" 
+      autofocus="true">
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-input
+      [(ngModel)]="password"
+      minLength="6"
+      placeholder="password" 
+      name="custom" 
+      [type]="isShowingPassword ? 'text' : 'password'" 
+      autocomplete="bro fuck off" 
+      enterkeyhint="go" 
+      clearOnEdit="true">
+    </ion-input>
+
+    <ion-icon 
+      style="cursor: pointer;"
+      slot="end" 
+      [name]="isShowingPassword ? 'eye-off' : 'eye'"
+      (click)="togglePasswordVisibility()">
+    </ion-icon>
+  </ion-item>
+
+  <ion-item>
+    <ion-button color="tertiary" (click)="sendSignUpRequestToFirebase()">Sign up & Log in</ion-button>
+    <ion-spinner name="crescent" slot="end" *ngIf="isLoadingRequest"></ion-spinner>
+  </ion-item>
+</ion-content>
