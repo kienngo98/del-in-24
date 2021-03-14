@@ -7,7 +7,9 @@
 <ion-content>
   <ion-list>
     <ion-item>
-      <ion-button color="danger" (click)="logout()">Log out</ion-button>
+      <ion-label slot="start">Logged in as {{ dataService.currentUser.email }}</ion-label>
+      <ion-button slot="end" color="primary" (click)="openInfoUpdatePopup()">Update info</ion-button>
+      <ion-button slot="end" color="danger" (click)="logout()">Log out</ion-button>
     </ion-item>
   </ion-list>
 </ion-content>

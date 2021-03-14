@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      &nbsp; Update your account
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissUpdateForm()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-thumbnail 
+    class="align-middle"
+    (mouseenter)="showUploadOption()" 
+    (mouseleave)="hideUploadOptoin()"
+    (click)="openImagePicker()">
+    <img [src]="currentUserImage">
+  </ion-thumbnail>
+
+  <input 
+    id="fileUploader"
+    style="visibility: hidden;"
+    type="file" 
+    accept="image/x-png,image/gif,image/jpeg" 
+    (change)="uploadNewImageToFirebase($event)"
+  />
+</ion-content>

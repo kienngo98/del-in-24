@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { DataService } from './services/data.service';
+import { ToastService } from './services/toast.service';
 
 @Component({
   selector: 'app-root',
@@ -10,16 +12,22 @@ import { Router } from '@angular/router';
 export class AppComponent {
   constructor(
     private firebaseAuth: AngularFireAuth,
-    private router: Router
+    private router: Router,
+    public toast: ToastService,
+    public dataService: DataService
   ) {
     this.firebaseAuth.onAuthStateChanged(user => {
       if (user) {
-        console.log('user logged in');
-        this.router.navigate(['/app/chat']);
+        this.dataService.currentUser = {
+          email: user.email,
+          uid: user.uid,
+          photoURL: user.photoURL
+        }
+        this.toast.presentSimpleToast('You have logged in');
+        if (!this.router.url.includes('/app')) this.router.navigate(['/app/chat']);
       }
       else {
-        console.log('User logged out');
-        
+        this.dataService.currentUser = { email: '' };
       }
     });
   }

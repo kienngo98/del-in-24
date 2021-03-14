@@ -12,8 +12,8 @@ const routes: Routes = [
         loadChildren: () => import('../chat/chat.module').then(m => m.ChatPageModule)
       },
       {
-        path: 'people',
-        loadChildren: () => import('../people/people.module').then(m => m.PeoplePageModule)
+        path: 'contact',
+        loadChildren: () => import('../contact/contact.module').then(m => m.ContactPageModule)
       },
       {
         path: 'settings',

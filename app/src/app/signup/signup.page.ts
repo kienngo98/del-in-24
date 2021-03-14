@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-signup',
@@ -15,11 +16,12 @@ export class SignupPage implements OnInit {
   email: string = '';
   password: string = '';
 
-  constructor(private alertController: AlertController, 
+  constructor(
     private firebaseAuth: AngularFireAuth,
     private fireStore: AngularFirestore,
     private modalCtrl: ModalController,
-    private router: Router
+    private router: Router,
+    public toast: ToastService
   ) { 
     this.clearSignUpInfo();
   }
@@ -37,25 +39,15 @@ export class SignupPage implements OnInit {
     this.isShowingPassword = !this.isShowingPassword;
   }
 
-  async presentAlert(header:string, message: string) {
-    const alert = await this.alertController.create({
-      header: header,
-      message: message,
-      buttons: ['OK']
-    });
-
-    await alert.present();
-  }
-
   async sendSignUpRequestToFirebase():Promise<any> {
     this.isLoadingRequest = true;
     return this.firebaseAuth.createUserWithEmailAndPassword(this.email, this.password).then(res => {
       // Add new user data to [/users/] collection
       return this.fireStore.collection('users').doc(res.user.uid).set({
         email: res.user.email,
-        displayName: res.user.displayName,
-        phoneNumber: res.user.phoneNumber,
-        photoURL: res.user.photoURL,
+        // displayName: res.user.displayName,
+        // phoneNumber: res.user.phoneNumber,
+        // photoURL: res.user.photoURL,
         sharedFiles: [],
         receivedFiles: [],
       })
@@ -68,7 +60,7 @@ export class SignupPage implements OnInit {
     })
     .catch(err => {
       this.isLoadingRequest = false;
-      this.presentAlert('Error', err);
+      this.toast.presentSimpleToast(err);
     });
   }
 

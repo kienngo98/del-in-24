@@ -27,12 +27,20 @@ const routes: Routes = [
     loadChildren: () => import('./chat/chat.module').then( m => m.ChatPageModule)
   },
   {
-    path: 'people',
-    loadChildren: () => import('./people/people.module').then( m => m.PeoplePageModule)
+    path: 'contact',
+    loadChildren: () => import('./contact/contact.module').then( m => m.ContactPageModule)
   },
   {
     path: 'settings',
     loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
+  },
+  {
+    path: 'contact',
+    loadChildren: () => import('./contact/contact.module').then( m => m.ContactPageModule)
+  },
+  {
+    path: 'update-info',
+    loadChildren: () => import('./update-info/update-info.module').then( m => m.UpdateInfoPageModule)
   }
 ];
 @NgModule({
