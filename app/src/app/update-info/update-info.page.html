@@ -20,6 +20,22 @@
     <img [src]="currentUserImage">
   </ion-thumbnail>
 
+  <br><br><br>
+  <ion-item>
+    <ion-label position="stacked">Email</ion-label>
+    <ion-input disabled="true">{{ dataService.currentUser.email }}</ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Display name</ion-label>
+    <ion-input>{{ dataService.currentUser.displayName }}</ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Number</ion-label>
+    <ion-input>{{ dataService.currentUser.phoneNumber }}</ion-input>
+  </ion-item>
+
   <input 
     id="fileUploader"
     style="visibility: hidden;"

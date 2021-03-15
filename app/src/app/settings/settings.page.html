@@ -7,9 +7,18 @@
 <ion-content>
   <ion-list>
     <ion-item>
-      <ion-label slot="start">Logged in as {{ dataService.currentUser.email }}</ion-label>
-      <ion-button slot="end" color="primary" (click)="openInfoUpdatePopup()">Update info</ion-button>
-      <ion-button slot="end" color="danger" (click)="logout()">Log out</ion-button>
+      <ion-avatar slot="start">
+        <img [src]="dataService.currentUser.photoURL">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ dataService.currentUser.email }}</h2>
+        <h3>{{ (dataService.currentUser.displayName) ? dataService.currentUser.displayName : 'No username available' }}</h3>
+        <p>{{ (dataService.currentUser.phoneNumber) ? dataService.currentUser.phoneNumber : 'Phone number not available' }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-button color="primary" (click)="openInfoUpdatePopup()">Update info</ion-button>
+      <ion-button color="danger" (click)="logout()">Log out</ion-button>
     </ion-item>
   </ion-list>
 </ion-content>

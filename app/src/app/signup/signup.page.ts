@@ -44,25 +44,37 @@ export class SignupPage implements OnInit {
   async sendSignUpRequestToFirebase():Promise<any> {
     this.isLoadingRequest = true;
     return this.firebaseAuth.createUserWithEmailAndPassword(this.email, this.password).then(res => {
+      const registeredEmail = res.user.email;
+      const defaultDisplayName = registeredEmail.split('@')[0];
+      
       // Add new user data to [/users/] collection
       return this.fireStore.collection('users').doc(res.user.uid).set({
-        email: res.user.email,
+        email: registeredEmail,
         phoneNumber: res.user.phoneNumber,
-        displayName: res.user.displayName,
+        displayName: defaultDisplayName,
+        photoUrl: '../../assets/images/blank-avatar.png',
         contacts: [],
         sharedFiles: [],
         receivedFiles: [],
+
+        // Save fields for case-sensitive search
+        $combinedInfo: [
+          registeredEmail.toLowerCase(),
+          defaultDisplayName.toLowerCase(),
+          ''
+        ]
       })
       .then(() => {
-        // Go to app
+        // Save new record to Firestore
         this.dataService.currentUser = {
-          email: res.user.email,
+          email: registeredEmail,
           uid: res.user.uid,
-          displayName: res.user.email.split('@')[0],
+          displayName: defaultDisplayName,
           photoUrl: '../../assets/images/blank-avatar.png',
           contacts: [],
           sharedFiles: [],
           receivedFiles: [],
+          fullContactList: []
         };
         this.dismissSignupForm();
         this.router.navigate(['/app/chat']);

@@ -6,10 +6,11 @@
 
 <ion-content>
   <ion-card *ngIf="!dataService.currentUser.contacts.length && isShowingZeroContactAlert">
-    <ion-card-header>You don't have any contact</ion-card-header>
-    <ion-card-content>
-      Search for people using their emails or phone numbers
-    </ion-card-content>
+    <ion-item>
+      You don't have any contact
+    <ion-icon name="close" slot="end"></ion-icon>
+    </ion-item>
+    <ion-item>Search for people using their emails or phone numbers</ion-item>
   </ion-card>
 
   <!-- Search bar, to search all the user database in Firestore -->
@@ -24,7 +25,7 @@
   <!-- List used to display the search-matched results -->
   <ion-list *ngIf="searchItems.length > 0">
     <ion-list-header>
-      Search result
+      Search result: 
     </ion-list-header>
     <ion-item *ngFor="let item of searchItems" class="item-search-result">
       <ion-avatar slot="start">
@@ -35,7 +36,32 @@
         <h3>{{ (item.displayName) ? item.displayName : 'No username available' }}</h3>
         <p>{{ (item.phoneNumber) ? item.phoneNumber : 'Phone number not available' }}</p>
       </ion-label>
-      <ion-icon name="person-add-outline" slot="end"></ion-icon>
+      <ion-icon 
+        (click)="addToContact(item)"
+        color="warning"
+        name="person-add" slot="end">
+      </ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="dataService.currentUser.contacts.length">
+    <ion-list-header>
+      Your contacts 
+    </ion-list-header>
+    <ion-item *ngFor="let contact of dataService.currentUser.fullContactList" class="item-search-result">
+      <ion-avatar slot="start">
+        <img [src]="contact.photoURL">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ contact.email }}</h2>
+        <h3>{{ (contact.displayName) ? contact.displayName : 'No username available' }}</h3>
+        <p>{{ (contact.phoneNumber) ? contact.phoneNumber : 'Phone number not available' }}</p>
+      </ion-label>
+      <ion-icon 
+        (click)="removeFromContact(contact.email)"
+        color="danger"
+        name="person-remove" slot="end">
+      </ion-icon>
     </ion-item>
   </ion-list>
 </ion-content>

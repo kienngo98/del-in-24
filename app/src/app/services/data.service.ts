@@ -12,7 +12,8 @@ export class DataService {
     phoneNumber: '',
     contacts: [],
     sharedFiles: [],
-    receivedFiles: []
+    receivedFiles: [],
+    fullContactList: []
   };
   constructor() { }
 }

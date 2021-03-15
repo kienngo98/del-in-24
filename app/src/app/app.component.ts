@@ -23,8 +23,14 @@ export class AppComponent {
         const uid = user.uid;
         this.fireStore.doc(`users/${uid}`).get().toPromise().then(res => {
           if (res.exists) {
-            this.dataService.currentUser = Object.assign(this.dataService.currentUser, res.data());
+            const userData:any = res.data();
+            this.dataService.currentUser = Object.assign(this.dataService.currentUser, userData);
             this.dataService.currentUser.uid = uid;
+            if (userData.contacts.length) {
+              this.fireStore.collection('users', ref => ref.where('email', 'in', userData.contacts)).valueChanges().subscribe(res => {
+                this.dataService.currentUser.fullContactList = res;
+              });
+            }
           }
           else {
             this.toast.presentSimpleToast('Could not find user');
@@ -36,6 +42,7 @@ export class AppComponent {
         if (!this.router.url.includes('/app')) this.router.navigate(['/app/chat']);
       }
       else {
+        // When logged out => Reset the currentUser variable
         this.dataService.currentUser = { 
           email: '', 
           photoURL: '', 
