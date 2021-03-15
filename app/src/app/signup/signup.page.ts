@@ -47,6 +47,8 @@ export class SignupPage implements OnInit {
       // Add new user data to [/users/] collection
       return this.fireStore.collection('users').doc(res.user.uid).set({
         email: res.user.email,
+        phoneNumber: res.user.phoneNumber,
+        displayName: res.user.displayName,
         contacts: [],
         sharedFiles: [],
         receivedFiles: [],
@@ -60,7 +62,8 @@ export class SignupPage implements OnInit {
           contacts: [],
           sharedFiles: [],
           receivedFiles: [],
-        }
+        };
+        this.dismissSignupForm();
         this.router.navigate(['/app/chat']);
         this.clearSignUpInfo();
         this.isLoadingRequest = false;

@@ -11,4 +11,22 @@
       Search for people using their emails, phone numbers or nicknames
     </ion-card-content>
   </ion-card>
+
+  <!-- Search bar, to search all the user database in Firestore -->
+  <ion-searchbar 
+    (ionChange)="getSearchText($event)"
+    debounce="500" 
+    showCancelButton="focus"
+    cancelButtonText="Cancel"
+    placeholder="Find someone">
+  </ion-searchbar>
+
+  
+
+  <!-- List used to display the search-matched results -->
+  <ion-list *ngIf="searchItems | async; let items">
+    <ion-item *ngFor="let item of items">
+      {{ item.email }} - {{ item.displayName }}
+    </ion-item>
+  </ion-list>
 </ion-content>
