@@ -18,7 +18,6 @@ export class UpdateInfoPage implements OnInit {
 
   constructor(
     private firebase: FirebaseApp,
-    // private fireStore: AngularFirestore,
     private modalCtrl: ModalController,
     public dataService: DataService,
     private storage: AngularFireStorage,

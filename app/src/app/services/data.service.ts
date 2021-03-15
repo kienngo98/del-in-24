@@ -9,7 +9,10 @@ export class DataService {
     photoURL: '', 
     uid: '',
     displayName: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    contacts: [],
+    sharedFiles: [],
+    receivedFiles: []
   };
   constructor() { }
 }

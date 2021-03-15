@@ -4,6 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { ToastService } from '../services/toast.service';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-signup',
@@ -21,7 +22,8 @@ export class SignupPage implements OnInit {
     private fireStore: AngularFirestore,
     private modalCtrl: ModalController,
     private router: Router,
-    public toast: ToastService
+    public toast: ToastService,
+    public dataService: DataService
   ) { 
     this.clearSignUpInfo();
   }
@@ -51,6 +53,14 @@ export class SignupPage implements OnInit {
       })
       .then(() => {
         // Go to app
+        this.dataService.currentUser = {
+          email: res.user.email,
+          uid: res.user.uid,
+          photoUrl: '',
+          contacts: [],
+          sharedFiles: [],
+          receivedFiles: [],
+        }
         this.router.navigate(['/app/chat']);
         this.clearSignUpInfo();
         this.isLoadingRequest = false;

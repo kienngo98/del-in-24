@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { DataService } from './services/data.service';
 import { ToastService } from './services/toast.service';
@@ -14,25 +15,37 @@ export class AppComponent {
     private firebaseAuth: AngularFireAuth,
     private router: Router,
     public toast: ToastService,
-    public dataService: DataService
+    public dataService: DataService,
+    private fireStore: AngularFirestore
   ) {
     this.firebaseAuth.onAuthStateChanged(user => {
       if (user) {
-        this.dataService.currentUser = {
-          email: user.email,
-          uid: user.uid,
-          photoURL: user.photoURL,
-          displayName: user.displayName,
-          phoneNumber: user.phoneNumber
-        }
+        const uid = user.uid;
+        this.fireStore.doc(`users/${uid}`).get().toPromise().then(res => {
+          if (res.exists) {
+            this.dataService.currentUser = Object.assign(this.dataService.currentUser, res.data());
+          }
+          else {
+            this.toast.presentSimpleToast('Could not find user');
+          }
+        });
         this.toast.presentSimpleToast('You have logged in');
+
+        // If on home page => Navigate into the app
         if (!this.router.url.includes('/app')) this.router.navigate(['/app/chat']);
       }
       else {
-        this.dataService.currentUser = { email: '' };
+        this.dataService.currentUser = { 
+          email: '', 
+          photoURL: '', 
+          uid: '',
+          displayName: '',
+          phoneNumber: '',
+          contacts: [],
+          sharedFiles: [],
+          receivedFiles: []
+        };
       }
     });
   }
-
-  
 }

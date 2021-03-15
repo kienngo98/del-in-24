@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -14,10 +15,13 @@ export class LoginPage implements OnInit {
   email: string = '';
   password: string = '';
 
-  constructor(private alertController: AlertController, 
+  constructor(
+    private alertController: AlertController, 
     private firebaseAuth: AngularFireAuth,
     private modalCtrl: ModalController,
-    private router: Router) { 
+    private router: Router,
+    public toast: ToastService
+  ) { 
       this.clearLogInInfo();
   }
 
@@ -28,6 +32,10 @@ export class LoginPage implements OnInit {
   clearLogInInfo() {
     this.email = '';
     this.password = '';
+  }
+
+  togglePasswordVisibility():void {
+    this.isShowingPassword = !this.isShowingPassword;
   }
 
   async presentAlert(header:string, message: string) {
@@ -54,7 +62,7 @@ export class LoginPage implements OnInit {
       this.router.navigate(['/app/chat']);
     })
     .catch(err => {
-      console.log(err);
+      this.toast.presentSimpleToast(err.message);
     });
   }
 }

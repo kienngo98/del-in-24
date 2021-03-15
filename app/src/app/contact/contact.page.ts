@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-contact',
@@ -6,10 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./contact.page.scss'],
 })
 export class ContactPage implements OnInit {
-
-  constructor() { }
+  isShowingZeroContactAlert: boolean = true;
+  constructor(
+    public dataService: DataService
+  ) { }
 
   ngOnInit() {
+    console.log(this.dataService.currentUser)
   }
 
 }
