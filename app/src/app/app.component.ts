@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { DataService } from './services/data.service';
 import { ToastService } from './services/toast.service';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-root',
@@ -16,8 +17,10 @@ export class AppComponent {
     private router: Router,
     public toast: ToastService,
     public dataService: DataService,
-    private fireStore: AngularFirestore
+    private fireStore: AngularFirestore,
+    private localStorage: Storage
   ) {
+    this.loadDarkModeConfig();
     this.firebaseAuth.onAuthStateChanged(user => {
       if (user) {
         const uid = user.uid;
@@ -54,6 +57,13 @@ export class AppComponent {
           receivedFiles: []
         };
       }
+    });
+  }
+
+  async loadDarkModeConfig():Promise<any> {
+    return this.localStorage.get('IS_DARK_MODE_ON').then(data => {
+      this.dataService.IS_DARK_MODE_ON = data;
+      document.body.classList.toggle('dark', data);
     });
   }
 }

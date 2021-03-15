@@ -12,9 +12,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
   styleUrls: ['./update-info.page.scss'],
 })
 export class UpdateInfoPage implements OnInit {
-  defaultPhotoURL: string = '../../assets/images/blank-avatar.png';
   uploadImageURL: string = '../../assets/images/upload-option.png';
-  currentUserImage: string = (this.dataService.currentUser.photoURL) ? this.dataService.currentUser.photoURL : this.defaultPhotoURL;
+  currentUserImage: string = this.dataService.currentUser.photoURL;
   isUploadingNewPhoto: boolean = false;
 
   constructor(
@@ -41,7 +40,7 @@ export class UpdateInfoPage implements OnInit {
 
   hideUploadOptoin() {
     this.isUploadingNewPhoto = true;
-    this.currentUserImage = (this.dataService.currentUser.photoURL) ? this.dataService.currentUser.photoURL : this.defaultPhotoURL;
+    this.currentUserImage = this.dataService.currentUser.photoURL;
   }
 
   openImagePicker():void {

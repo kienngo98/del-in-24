@@ -5,6 +5,7 @@ import { ModalController } from '@ionic/angular';
 import { DataService } from '../services/data.service';
 import { ToastService } from '../services/toast.service';
 import { UpdateInfoPage } from '../update-info/update-info.page';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-settings',
@@ -12,19 +13,20 @@ import { UpdateInfoPage } from '../update-info/update-info.page';
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
-  dark = false;
   constructor(
     private firebaseAuth: AngularFireAuth,
     private router: Router,
     public toast: ToastService,
     public dataService: DataService,
-    public modalController: ModalController
+    public modalController: ModalController,
+    private localStorage: Storage
   ) { 
 
   }
 
   updateDarkMode() {
-    document.body.classList.toggle('dark', this.dark);
+    document.body.classList.toggle('dark', this.dataService.IS_DARK_MODE_ON);
+    this.localStorage.set('IS_DARK_MODE_ON', this.dataService.IS_DARK_MODE_ON);
   }
 
   ngOnInit() {

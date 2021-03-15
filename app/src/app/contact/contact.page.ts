@@ -10,7 +10,6 @@ import { ToastService } from '../services/toast.service';
 })
 
 export class ContactPage implements OnInit {
-  isShowingZeroContactAlert: boolean = true;
   isSearchResultFound: boolean = false;
   searchItems: Array<any> = [];
   constructor(
@@ -23,6 +22,13 @@ export class ContactPage implements OnInit {
 
   ngOnInit() {
     console.log(this.dataService.currentUser);
+  }
+
+  async closeContactTip():Promise<any> {
+    this.dataService.currentUser.showContactTip = false;
+
+    // Neven show the tips again. Users have to turn on TIPS in setting page
+
   }
 
   getSearchText(event) {

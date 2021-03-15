@@ -5,10 +5,10 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngIf="!dataService.currentUser.contacts.length && isShowingZeroContactAlert">
+  <ion-card *ngIf="!dataService.currentUser.contacts.length && dataService.IS_SHOWING_CONTACT_TIPS">
     <ion-item>
       You don't have any contact
-    <ion-icon name="close" slot="end"></ion-icon>
+    <ion-icon style="cursor: pointer;" name="close" slot="end" (click)="closeContactTip()"></ion-icon>
     </ion-item>
     <ion-item>Search for people using their emails or phone numbers</ion-item>
   </ion-card>

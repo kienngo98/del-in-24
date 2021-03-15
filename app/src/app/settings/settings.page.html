@@ -25,9 +25,9 @@
     <ion-item-divider>App</ion-item-divider>
 
     <ion-item>
-      <ion-icon slot="start" name="moon" [color]="(dark) ? 'warning' : 'dark'"></ion-icon>
+      <ion-icon slot="start" name="moon" [color]="(dataService.IS_DARK_MODE_ON) ? 'warning' : 'dark'"></ion-icon>
       <ion-label>Dark mode</ion-label>
-      <ion-toggle [(ngModel)]="dark" (ionChange)="updateDarkMode()"></ion-toggle>
+      <ion-toggle [(ngModel)]="dataService.IS_DARK_MODE_ON" (ionChange)="updateDarkMode()"></ion-toggle>
     </ion-item>
   </ion-list>
 </ion-content>
