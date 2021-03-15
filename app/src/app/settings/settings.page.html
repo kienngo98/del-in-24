@@ -6,6 +6,7 @@
 
 <ion-content>
   <ion-list>
+    <ion-item-divider>Account</ion-item-divider>
     <ion-item>
       <ion-avatar slot="start">
         <img [src]="dataService.currentUser.photoURL">
@@ -19,6 +20,14 @@
     <ion-item>
       <ion-button color="primary" (click)="openInfoUpdatePopup()">Update info</ion-button>
       <ion-button color="danger" (click)="logout()">Log out</ion-button>
+    </ion-item>
+
+    <ion-item-divider>App</ion-item-divider>
+
+    <ion-item>
+      <ion-icon slot="start" name="moon" [color]="(dark) ? 'warning' : 'dark'"></ion-icon>
+      <ion-label>Dark mode</ion-label>
+      <ion-toggle [(ngModel)]="dark" (ionChange)="updateDarkMode()"></ion-toggle>
     </ion-item>
   </ion-list>
 </ion-content>

@@ -12,7 +12,7 @@ import { UpdateInfoPage } from '../update-info/update-info.page';
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
-
+  dark = false;
   constructor(
     private firebaseAuth: AngularFireAuth,
     private router: Router,
@@ -21,6 +21,10 @@ export class SettingsPage implements OnInit {
     public modalController: ModalController
   ) { 
 
+  }
+
+  updateDarkMode() {
+    document.body.classList.toggle('dark', this.dark);
   }
 
   ngOnInit() {
