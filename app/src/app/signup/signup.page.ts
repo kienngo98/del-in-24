@@ -58,7 +58,8 @@ export class SignupPage implements OnInit {
         this.dataService.currentUser = {
           email: res.user.email,
           uid: res.user.uid,
-          photoUrl: '',
+          displayName: res.user.email.split('@')[0],
+          photoUrl: '../../assets/images/blank-avatar.png',
           contacts: [],
           sharedFiles: [],
           receivedFiles: [],

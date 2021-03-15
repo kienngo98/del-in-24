@@ -24,6 +24,7 @@ export class AppComponent {
         this.fireStore.doc(`users/${uid}`).get().toPromise().then(res => {
           if (res.exists) {
             this.dataService.currentUser = Object.assign(this.dataService.currentUser, res.data());
+            this.dataService.currentUser.uid = uid;
           }
           else {
             this.toast.presentSimpleToast('Could not find user');

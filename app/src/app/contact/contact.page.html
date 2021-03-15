@@ -8,7 +8,7 @@
   <ion-card *ngIf="!dataService.currentUser.contacts.length && isShowingZeroContactAlert">
     <ion-card-header>You don't have any contact</ion-card-header>
     <ion-card-content>
-      Search for people using their emails, phone numbers or nicknames
+      Search for people using their emails or phone numbers
     </ion-card-content>
   </ion-card>
 
@@ -21,12 +21,21 @@
     placeholder="Find someone">
   </ion-searchbar>
 
-  
-
   <!-- List used to display the search-matched results -->
-  <ion-list *ngIf="searchItems | async; let items">
-    <ion-item *ngFor="let item of items">
-      {{ item.email }} - {{ item.displayName }}
+  <ion-list *ngIf="searchItems.length > 0">
+    <ion-list-header>
+      Search result
+    </ion-list-header>
+    <ion-item *ngFor="let item of searchItems" class="item-search-result">
+      <ion-avatar slot="start">
+        <img [src]="item.photoURL">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ item.email }}</h2>
+        <h3>{{ (item.displayName) ? item.displayName : 'No username available' }}</h3>
+        <p>{{ (item.phoneNumber) ? item.phoneNumber : 'Phone number not available' }}</p>
+      </ion-label>
+      <ion-icon name="person-add-outline" slot="end"></ion-icon>
     </ion-item>
   </ion-list>
 </ion-content>

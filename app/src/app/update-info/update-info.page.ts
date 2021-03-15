@@ -4,6 +4,7 @@ import { DataService } from '../services/data.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { FirebaseApp } from '@angular/fire';
 import { LoadService } from '../services/load.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-update-info',
@@ -21,7 +22,8 @@ export class UpdateInfoPage implements OnInit {
     private modalCtrl: ModalController,
     public dataService: DataService,
     private storage: AngularFireStorage,
-    public loader: LoadService
+    public loader: LoadService,
+    private fireStore: AngularFirestore
   ) {}
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class UpdateInfoPage implements OnInit {
     document.getElementById('fileUploader').click();
   }
 
-  uploadNewImageToFirebase(event: any) {
+  async uploadNewImageToFirebase(event: any):Promise<any> {
     const file = event.target.files[0];
     const path = `avatars/${this.dataService.currentUser.email}/`;
     const ref = this.storage.ref(path);
@@ -63,13 +65,13 @@ export class UpdateInfoPage implements OnInit {
           // Update current user's photoURL
           this.firebase.auth().currentUser.updateProfile({ photoURL: url }).then(() => {
             this.loader.dismissLoading();
-            imageUrlSub.unsubscribe();
+            // Update new photo url to Firestore
+            return this.fireStore.doc(`users/${this.dataService.currentUser.uid}`).update({
+              photoURL: url
+            }).then(() => {
+              imageUrlSub.unsubscribe();
+            });
           });
-
-          // Update new phot url to Firestore - not sure we need this
-          // return this.fireStore.doc(`users/${this.dataService.currentUser.uid}`).update({
-          //   photoURL: url
-          // })
         });
       })
       .catch(err => {
