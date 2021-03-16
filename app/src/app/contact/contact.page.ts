@@ -12,6 +12,8 @@ import { NavigationExtras, Router } from '@angular/router';
 })
 
 export class ContactPage implements OnInit {
+  searchBarText:string = '';
+  currentSegment: string = 'contact';
   isSearchResultFound: boolean = false;
   searchItems: Array<any> = [];
   constructor(
@@ -25,7 +27,12 @@ export class ContactPage implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.dataService.currentUser);
+    // console.log(this.dataService.currentUser);
+  }
+
+  segmentChanged() {
+    this.searchItems = [];
+    this.searchBarText = '';
   }
 
   async closeContactTip():Promise<any> {
@@ -34,25 +41,26 @@ export class ContactPage implements OnInit {
     this.localStorage.set('IS_SHOWING_CONTACT_TIPS', this.dataService.IS_SHOWING_CONTACT_TIPS);
   }
 
-  getSearchText(event) {
+  getSearchText() {
     this.searchItems = [];
-
-    const text = event.target.value.toLowerCase();
+    const text = this.searchBarText.toLowerCase();
     if (!text) return;
 
     // Filter current contact list
+    if (this.currentSegment === 'contact') {
 
-
-    // Search from Firestore Database
-    const query = this.fireStore.collection('users', ref => ref.where('$combinedInfo', 'array-contains', text).limit(4)).valueChanges().subscribe(res => {
-      this.searchItems = [...new Set(this.searchItems.concat(res))]
-        // Hide your own account record
-        .filter(rec => rec.email !== this.dataService.currentUser.email) 
-        // Hide the ones that are already in Contact list
-        .filter(res => !this.dataService.currentUser.contacts.includes(res.email));
-
-        query.unsubscribe();
-    });
+    }
+    else if(this.currentSegment === 'people') {
+      // Search from Firestore Database
+      const query = this.fireStore.collection('users', ref => ref.where('$combinedInfo', 'array-contains', text).limit(4)).valueChanges().subscribe(res => {
+        this.searchItems = [...new Set(this.searchItems.concat(res))]
+          // Hide your own account record
+          .filter(rec => rec.email !== this.dataService.currentUser.email) 
+          // Hide the ones that are already in Contact list
+          .filter(res => !this.dataService.currentUser.contacts.includes(res.email));
+          query.unsubscribe();
+      });
+    }
   }
 
   async addToContact(contact: any):Promise<any> {

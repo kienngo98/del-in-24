@@ -5,22 +5,32 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngIf="!dataService.currentUser.contacts.length && dataService.IS_SHOWING_CONTACT_TIPS">
+  <ion-segment [(ngModel)]="currentSegment" (ionChange)="segmentChanged()">
+    <ion-segment-button value="contact">
+      <ion-label>Your contacts</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="people">
+      <ion-label>People</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- Search bar, to search all the user database in Firestore -->
+  <ion-searchbar
+    [(ngModel)]="searchBarText"
+    (ionChange)="getSearchText()"
+    debounce="500" 
+    showCancelButton="focus"
+    cancelButtonText="Cancel"
+    placeholder="Find someone">
+  </ion-searchbar>
+
+  <ion-card *ngIf="!dataService.currentUser.contacts.length && dataService.IS_SHOWING_CONTACT_TIPS && currentSegment === 'contact'">
     <ion-item>
       You don't have any contact
     <ion-icon style="cursor: pointer;" name="close" slot="end" (click)="closeContactTip()"></ion-icon>
     </ion-item>
     <ion-item>Search for people using their emails or phone numbers</ion-item>
   </ion-card>
-
-  <!-- Search bar, to search all the user database in Firestore -->
-  <ion-searchbar 
-    (ionChange)="getSearchText($event)"
-    debounce="500" 
-    showCancelButton="focus"
-    cancelButtonText="Cancel"
-    placeholder="Find someone">
-  </ion-searchbar>
 
   <!-- List used to display the search-matched results -->
   <ion-list *ngIf="searchItems.length > 0">
@@ -44,7 +54,7 @@
     </ion-item>
   </ion-list>
 
-  <ion-list *ngIf="dataService.currentUser.contacts.length">
+  <ion-list *ngIf="dataService.currentUser.contacts.length && currentSegment === 'contact'">
     <ion-list-header>
       Your contacts 
     </ion-list-header>
