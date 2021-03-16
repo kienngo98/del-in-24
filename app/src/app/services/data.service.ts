@@ -16,8 +16,6 @@ export class DataService {
     sharedFiles: [],
     receivedFiles: [],
     fullContactList: [],
-    darkModeOn: false,
-    showContactTip: true
   };
 
   // Default avatar url for new account
@@ -29,5 +27,5 @@ export class DataService {
   // If TRUE then shows tip i Contact Page
   IS_SHOWING_CONTACT_TIPS: boolean = true;
 
-  
+
 }

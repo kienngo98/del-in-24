@@ -3,6 +3,7 @@ import { DataService } from '../services/data.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase';
 import { ToastService } from '../services/toast.service';
+import { Storage } from '@ionic/storage';
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.page.html',
@@ -15,7 +16,8 @@ export class ContactPage implements OnInit {
   constructor(
     public dataService: DataService,
     private fireStore: AngularFirestore,
-    public toast: ToastService
+    public toast: ToastService,
+    private localStorage: Storage
   ) { 
 
   }
@@ -25,10 +27,9 @@ export class ContactPage implements OnInit {
   }
 
   async closeContactTip():Promise<any> {
-    this.dataService.currentUser.showContactTip = false;
-
+    this.dataService.IS_SHOWING_CONTACT_TIPS = false;
     // Neven show the tips again. Users have to turn on TIPS in setting page
-
+    this.localStorage.set('IS_SHOWING_CONTACT_TIPS', this.dataService.IS_SHOWING_CONTACT_TIPS);
   }
 
   getSearchText(event) {

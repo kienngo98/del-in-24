@@ -20,7 +20,11 @@ export class AppComponent {
     private fireStore: AngularFirestore,
     private localStorage: Storage
   ) {
+    // Load layout configs
     this.loadDarkModeConfig();
+    this.loadContactTipConfig();
+
+    // Load user information (if already logged in)
     this.firebaseAuth.onAuthStateChanged(user => {
       if (user) {
         const uid = user.uid;
@@ -64,6 +68,14 @@ export class AppComponent {
     return this.localStorage.get('IS_DARK_MODE_ON').then(data => {
       this.dataService.IS_DARK_MODE_ON = data;
       document.body.classList.toggle('dark', data);
+    });
+  }
+
+  async loadContactTipConfig():Promise<any> {
+    return this.localStorage.get('IS_SHOWING_CONTACT_TIPS').then(data => {
+      const strValue = String(data);
+      if (strValue === 'true') this.dataService.IS_SHOWING_CONTACT_TIPS = true;
+      else if (strValue === 'false') this.dataService.IS_SHOWING_CONTACT_TIPS = false;
     });
   }
 }
