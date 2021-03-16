@@ -71,7 +71,7 @@
         <p>{{ (contact.phoneNumber) ? contact.phoneNumber : 'Phone number not available' }}</p>
       </ion-label>
       <ion-icon 
-        (click)="removeFromContact(contact.email)"
+        (click)="promptUserToDeleteChatHistory($event, contact)"
         color="danger"
         name="person-remove" slot="end">
       </ion-icon>

@@ -5,6 +5,7 @@ import firebase from 'firebase';
 import { ToastService } from '../services/toast.service';
 import { Storage } from '@ionic/storage';
 import { NavigationExtras, Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.page.html',
@@ -22,7 +23,8 @@ export class ContactPage implements OnInit {
     private fireStore: AngularFirestore,
     public toast: ToastService,
     private localStorage: Storage,
-    private router: Router
+    private router: Router,
+    public alertController: AlertController
   ) { 
 
   }
@@ -67,17 +69,28 @@ export class ContactPage implements OnInit {
     }
   }
 
+  getChatDocumentIdFrom2Persons(uid1:string, uid2:string):string {
+    return (uid1 > uid2) ? `${uid1}${uid2}` : `${uid2}${uid1}`;
+  }
+
   async addToContact(contact: any):Promise<any> {
+    // Step 1: Add the person's email to user's contact list
     return this.fireStore.doc(`users/${this.dataService.currentUser.uid}`).update({
       contacts: firebase.firestore.FieldValue.arrayUnion(contact.email)
     })
     .then(() => {
-      // Clear out search results (optional)
-      this.searchItems = [];
-      // Add new contact to local variables
-      this.dataService.currentUser.fullContactList.push(contact);
-      this.dataService.currentUser.contacts.push(contact.email);
-      this.toast.presentSimpleToast('Contact added');
+      // Step 2: Create new document which will be use to contain the chat history (so, array type)
+      // We determine the document ID by comparing 2 users' uids together. The greater string goes first
+      const newDocumentId = this.getChatDocumentIdFrom2Persons(contact.uid, this.dataService.currentUser.uid);
+      this.fireStore.collection('messages').doc(newDocumentId).set({}).then(() => {
+        // Step 3: Feedback to user
+        // Clear out search results (optional)
+        this.searchItems = [];
+        // Add new contact to local variables
+        this.dataService.currentUser.fullContactList.push(contact);
+        this.dataService.currentUser.contacts.push(contact.email);
+        this.toast.presentSimpleToast('Contact added');
+      });
     })
     .catch(err => {
       this.toast.presentSimpleToast(err.message);
@@ -97,6 +110,38 @@ export class ContactPage implements OnInit {
     .catch(err => {
       this.toast.presentSimpleToast(err.message);
     });
+  }
+
+  async deleteChatHistory(contactUid:string):Promise<any> {
+    const chatDocumentId = this.getChatDocumentIdFrom2Persons(contactUid, this.dataService.currentUser.uid);
+    return this.fireStore.doc(`messages/${chatDocumentId}`).delete();
+  }
+
+  async promptUserToDeleteChatHistory(event:any, contact:any) {
+    event.stopPropagation();
+    const alert = await this.alertController.create({
+      header: 'Confirm delete',
+      message: 'Aldo delete your chat history with this person?',
+      buttons: [
+        {
+          text: 'No, keep',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            this.removeFromContact(contact.email);
+          }
+        }, {
+          text: 'Yes, delete for good',
+          cssClass: 'danger',
+          handler: () => {
+            this.deleteChatHistory(contact.uid);
+            this.removeFromContact(contact.email);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   goToInbox(email: string) {

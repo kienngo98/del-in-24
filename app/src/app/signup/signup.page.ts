@@ -49,6 +49,7 @@ export class SignupPage implements OnInit {
       
       // Add new user data to [/users/] collection
       return this.fireStore.collection('users').doc(res.user.uid).set({
+        uid: res.user.uid,
         email: registeredEmail,
         phoneNumber: res.user.phoneNumber,
         displayName: defaultDisplayName,
@@ -57,11 +58,11 @@ export class SignupPage implements OnInit {
         sharedFiles: [],
         receivedFiles: [],
 
-        // Save fields for case-sensitive search
+        // Save lowerCased fields for case-sensitive search
         $combinedInfo: [
           registeredEmail.toLowerCase(),
           defaultDisplayName.toLowerCase(),
-          ''
+          '' // phone number - to be updated when users update their own numbers
         ]
       })
       .then(() => {

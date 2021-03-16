@@ -8,3 +8,14 @@ ion-avatar {
         margin: auto;
     }
 }
+
+ion-content {
+    display: flex;
+    flex-direction: column;
+
+    #chatBar {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+}
