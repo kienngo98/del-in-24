@@ -59,7 +59,7 @@
       Your contacts 
     </ion-list-header>
     <ion-item 
-      *ngFor="let contact of dataService.currentUser.fullContactList" 
+      *ngFor="let contact of dataService.FILTERED_CONTACT_LIST" 
       (click)="goToInbox(contact.email)"
       class="item-search-result">
       <ion-avatar slot="start">

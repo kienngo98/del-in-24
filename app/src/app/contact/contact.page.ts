@@ -16,6 +16,7 @@ export class ContactPage implements OnInit {
   currentSegment: string = 'contact';
   isSearchResultFound: boolean = false;
   searchItems: Array<any> = [];
+  
   constructor(
     public dataService: DataService,
     private fireStore: AngularFirestore,
@@ -27,7 +28,7 @@ export class ContactPage implements OnInit {
   }
 
   ngOnInit() {
-    // console.log(this.dataService.currentUser);
+    console.log(this.dataService.currentUser);
   }
 
   segmentChanged() {
@@ -43,12 +44,15 @@ export class ContactPage implements OnInit {
 
   getSearchText() {
     this.searchItems = [];
+    this.dataService.FILTERED_CONTACT_LIST = this.dataService.currentUser.fullContactList;
     const text = this.searchBarText.toLowerCase();
     if (!text) return;
 
     // Filter current contact list
     if (this.currentSegment === 'contact') {
-
+      this.dataService.FILTERED_CONTACT_LIST = this.dataService.FILTERED_CONTACT_LIST.filter(
+        contact => contact.$combinedInfo.find((info:string) => info.indexOf(text) > -1)
+      );
     }
     else if(this.currentSegment === 'people') {
       // Search from Firestore Database

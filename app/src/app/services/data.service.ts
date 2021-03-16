@@ -19,7 +19,7 @@ export class DataService {
   };
 
   // Default avatar url for new account
-  DEFAULT_AVATAR_URL: string = 'https://firebasestorage.googleapis.com/v0/b/del-in-24.appspot.com/o/%24default_avatar.png';
+  DEFAULT_AVATAR_URL: string = 'https://cdn0.iconfinder.com/data/icons/streamline-emoji-1/48/096-grinning-cat-face-256.png';
 
   // True if Dark mode is ON; else FALSE
   IS_DARK_MODE_ON: boolean = false;
@@ -27,5 +27,6 @@ export class DataService {
   // If TRUE then shows tip i Contact Page
   IS_SHOWING_CONTACT_TIPS: boolean = true;
 
-
+  // Used in Contact page - for filtering from searchbar
+  FILTERED_CONTACT_LIST:Array<any> = [];
 }

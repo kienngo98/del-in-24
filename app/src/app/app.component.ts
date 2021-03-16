@@ -36,6 +36,7 @@ export class AppComponent {
             if (userData.contacts.length) {
               this.fireStore.collection('users', ref => ref.where('email', 'in', userData.contacts)).valueChanges().subscribe(res => {
                 this.dataService.currentUser.fullContactList = res;
+                this.dataService.FILTERED_CONTACT_LIST = res;
               });
             }
           }
