@@ -41,6 +41,10 @@ const routes: Routes = [
   {
     path: 'update-info',
     loadChildren: () => import('./update-info/update-info.module').then( m => m.UpdateInfoPageModule)
+  },
+  {
+    path: 'inbox',
+    loadChildren: () => import('./inbox/inbox.module').then( m => m.InboxPageModule)
   }
 ];
 @NgModule({

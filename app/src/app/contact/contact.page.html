@@ -48,7 +48,10 @@
     <ion-list-header>
       Your contacts 
     </ion-list-header>
-    <ion-item *ngFor="let contact of dataService.currentUser.fullContactList" class="item-search-result">
+    <ion-item 
+      *ngFor="let contact of dataService.currentUser.fullContactList" 
+      (click)="goToInbox(contact.email)"
+      class="item-search-result">
       <ion-avatar slot="start">
         <img [src]="contact.photoURL">
       </ion-avatar>

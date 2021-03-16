@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase';
 import { ToastService } from '../services/toast.service';
 import { Storage } from '@ionic/storage';
+import { NavigationExtras, Router } from '@angular/router';
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.page.html',
@@ -17,7 +18,8 @@ export class ContactPage implements OnInit {
     public dataService: DataService,
     private fireStore: AngularFirestore,
     public toast: ToastService,
-    private localStorage: Storage
+    private localStorage: Storage,
+    private router: Router
   ) { 
 
   }
@@ -83,5 +85,14 @@ export class ContactPage implements OnInit {
     .catch(err => {
       this.toast.presentSimpleToast(err.message);
     });
+  }
+
+  goToInbox(email: string) {
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        email: email
+      }
+    };
+    this.router.navigate(['inbox'], navigationExtras);
   }
 }
