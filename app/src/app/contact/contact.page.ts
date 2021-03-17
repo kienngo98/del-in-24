@@ -80,7 +80,8 @@ export class ContactPage implements OnInit {
       const newDocumentId = this.dataService.getChatDocumentIdFrom2Persons(contact.uid, this.dataService.currentUser.uid);
       this.fireStore.collection('messages').doc(newDocumentId).set({
         $combinedUIDs: [contact.uid, this.dataService.currentUser.uid],
-        chatHistory: []
+        chatHistory: [],
+        conversationId: newDocumentId
       }).then(() => {
         // Step 3: Feedback to user
         // Clear out search results (optional)
@@ -144,6 +145,7 @@ export class ContactPage implements OnInit {
   }
 
   goToInbox(email: string) {
+    this.dataService.getCurrentConversationIndex(email);
     const navigationExtras: NavigationExtras = {
       queryParams: {
         email: email
