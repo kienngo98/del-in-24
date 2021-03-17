@@ -5,5 +5,25 @@
 </ion-header>
 
 <ion-content>
+  <ion-item *ngIf="!dataService.CONVERSATION_LIST.length">
+    <ion-label>You don't have any conversation. Go make some friend</ion-label>
+  </ion-item>
 
+  <ion-list *ngIf="dataService.CONVERSATION_LIST.length">
+    <div *ngFor="let conversation of dataService.CONVERSATION_LIST">
+      <ion-item 
+        class="item-search-result"
+        *ngIf="conversation.showOnChatPage"
+        (click)="goToInbox(conversation.other.email)">
+        <ion-avatar slot="start">
+          <img [src]="conversation.other.photoURL">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ conversation.other.displayName }}</h2>
+          <br>
+          <p>{{ conversation.lastTextDisplay }}</p>
+        </ion-label>
+      </ion-item>
+    </div>
+  </ion-list>
 </ion-content>

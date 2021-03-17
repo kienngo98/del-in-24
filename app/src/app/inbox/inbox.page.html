@@ -13,9 +13,17 @@
 </ion-header>
 
 <ion-content>
+  <div class="chat">
+    <div *ngFor="let text of dataService.CONVERSATION_LIST[dataService.CURRENT_CONVERSATION_INDEX].chatHistory">
+      <div [class]="(text.senderUID !== dataService.currentUser.uid) ? 'message' : 'message me'">
+        <img [src]="(text.senderUID !== dataService.currentUser.uid) ? dataService.CONVERSATION_LIST[dataService.CURRENT_CONVERSATION_INDEX].other.photoURL : dataService.currentUser.photoURL" />
+        <div><p>{{ text.textContent }}</p></div>
+      </div>
+    </div>
+  </div>
   <ion-item id="chatBar">
     <ion-icon slot="start" name="add"></ion-icon>
-    <ion-icon slot="end" name="send" color="primary"></ion-icon>
-    <ion-textarea type="text" placeholder="Type something..."></ion-textarea>
+    <ion-icon slot="end" name="send" color="primary" (click)="sendText($event, dataService.CONVERSATION_LIST[dataService.CURRENT_CONVERSATION_INDEX].other.uid)"></ion-icon>
+    <ion-textarea type="text" placeholder="Type something..." (keyup.enter)="sendText($event, dataService.CONVERSATION_LIST[dataService.CURRENT_CONVERSATION_INDEX].other.uid)"></ion-textarea>
   </ion-item>
 </ion-content>

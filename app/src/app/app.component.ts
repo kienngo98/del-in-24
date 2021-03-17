@@ -37,6 +37,7 @@ export class AppComponent {
               this.fireStore.collection('users', ref => ref.where('email', 'in', userData.contacts)).valueChanges().subscribe(res => {
                 this.dataService.currentUser.fullContactList = res;
                 this.dataService.FILTERED_CONTACT_LIST = res;
+                this.getUserConversationList();
               });
             }
           }
@@ -47,7 +48,8 @@ export class AppComponent {
         this.toast.presentSimpleToast('You have logged in');
 
         // If on home page => Navigate into the app
-        if (!this.router.url.includes('/app')) this.router.navigate(['/app/chat']);
+        // if (!this.router.url.includes('/app')) this.router.navigate(['/app/chat']);
+        this.router.navigate(['/app/chat']);
       }
       else {
         // When logged out => Reset the currentUser variable
@@ -77,6 +79,31 @@ export class AppComponent {
       const strValue = String(data);
       if (strValue === 'true') this.dataService.IS_SHOWING_CONTACT_TIPS = true;
       else if (strValue === 'false') this.dataService.IS_SHOWING_CONTACT_TIPS = false;
+    });
+  }
+
+  getUserConversationList() {
+    this.fireStore.collection('messages', ref => ref.where('$combinedUIDs', 'array-contains', this.dataService.currentUser.uid)).valueChanges().subscribe(res => {
+      this.dataService.CONVERSATION_LIST = res
+        // Add some extra information for displaying purposes
+        .map((conversation:any) => {
+          conversation.$combinedUIDs.forEach((uid:string) => {
+            const label = (uid === this.dataService.currentUser.uid) ? 'you' : 'other';
+            conversation[label] = this.dataService.getUserContactInfoFromUID(uid);
+          });
+
+          // If the conversation has contents => Print the last text to screen
+          if (!conversation.chatHistory.length) {
+            conversation.showOnChatPage = false;
+          }
+          else {
+            conversation.showOnChatPage = true;
+            const lastText = conversation.chatHistory[conversation.chatHistory.length - 1];
+            const lastTextSender = (lastText.senderUID === conversation.you.uid) ? 'You' : '';
+            conversation.lastTextDisplay = (lastTextSender) ? `(${lastTextSender}): ${lastText.textContent}` : lastText.textContent;
+          }
+          return conversation;
+        });
     });
   }
 }

@@ -69,10 +69,6 @@ export class ContactPage implements OnInit {
     }
   }
 
-  getChatDocumentIdFrom2Persons(uid1:string, uid2:string):string {
-    return (uid1 > uid2) ? `${uid1}${uid2}` : `${uid2}${uid1}`;
-  }
-
   async addToContact(contact: any):Promise<any> {
     // Step 1: Add the person's email to user's contact list
     return this.fireStore.doc(`users/${this.dataService.currentUser.uid}`).update({
@@ -81,8 +77,11 @@ export class ContactPage implements OnInit {
     .then(() => {
       // Step 2: Create new document which will be use to contain the chat history (so, array type)
       // We determine the document ID by comparing 2 users' uids together. The greater string goes first
-      const newDocumentId = this.getChatDocumentIdFrom2Persons(contact.uid, this.dataService.currentUser.uid);
-      this.fireStore.collection('messages').doc(newDocumentId).set({}).then(() => {
+      const newDocumentId = this.dataService.getChatDocumentIdFrom2Persons(contact.uid, this.dataService.currentUser.uid);
+      this.fireStore.collection('messages').doc(newDocumentId).set({
+        $combinedUIDs: [contact.uid, this.dataService.currentUser.uid],
+        chatHistory: []
+      }).then(() => {
         // Step 3: Feedback to user
         // Clear out search results (optional)
         this.searchItems = [];
@@ -113,7 +112,7 @@ export class ContactPage implements OnInit {
   }
 
   async deleteChatHistory(contactUid:string):Promise<any> {
-    const chatDocumentId = this.getChatDocumentIdFrom2Persons(contactUid, this.dataService.currentUser.uid);
+    const chatDocumentId = this.dataService.getChatDocumentIdFrom2Persons(contactUid, this.dataService.currentUser.uid);
     return this.fireStore.doc(`messages/${chatDocumentId}`).delete();
   }
 

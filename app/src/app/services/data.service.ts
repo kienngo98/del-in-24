@@ -29,4 +29,27 @@ export class DataService {
 
   // Used in Contact page - for filtering from searchbar
   FILTERED_CONTACT_LIST:Array<any> = [];
+
+  // Use to list all the conversations user has on Chat page
+  CONVERSATION_LIST: Array<any> = [];
+
+  // Use to determine the current inbox user's viewing
+  CURRENT_CONVERSATION_INDEX:number = null;
+
+  public getUserContactInfoFromUID(uid:string) {
+    const currentUser = {...this.currentUser};
+    delete currentUser.fullContactList;
+    const searchArray = this.currentUser.fullContactList.concat([currentUser]);
+    return searchArray.find(contact => contact.uid === uid);
+  }
+
+  public getChatDocumentIdFrom2Persons(uid1:string, uid2:string):string {
+    return (uid1 > uid2) ? `${uid1}${uid2}` : `${uid2}${uid1}`;
+  }
+
+  public getCurrentConversationIndex(email:string) {
+    const otherUserUID = this.currentUser.fullContactList.find(user => user.email === email).uid;
+    const documentUID = this.getChatDocumentIdFrom2Persons(otherUserUID, this.currentUser.uid);
+    this.CURRENT_CONVERSATION_INDEX = this.CONVERSATION_LIST.findIndex(convo => convo.conversationId === documentUID);
+  }
 }
