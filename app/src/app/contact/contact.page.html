@@ -33,7 +33,7 @@
   </ion-card>
 
   <!-- List used to display the search-matched results -->
-  <ion-list *ngIf="searchItems.length > 0">
+  <ion-list *ngIf="searchItems.length > 0 && currentSegment === 'people'">
     <ion-list-header>
       Search result: 
     </ion-list-header>
