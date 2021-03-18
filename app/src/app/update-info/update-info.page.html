@@ -21,19 +21,28 @@
   </ion-thumbnail>
 
   <br><br><br>
+
+  <!-- Cannot change account email once created -->
   <ion-item>
     <ion-label position="stacked">Email</ion-label>
     <ion-input disabled="true">{{ dataService.currentUser.email }}</ion-input>
   </ion-item>
 
+  <!-- Display name can be duplicated, but must not be blank -->
   <ion-item>
     <ion-label position="stacked">Display name</ion-label>
-    <ion-input>{{ dataService.currentUser.displayName }}</ion-input>
+    <ion-input [(ngModel)]="displayName"></ion-input>
+  </ion-item>
+
+  <!-- Note: Phone number is optional, so user can leave it blank -->
+  <ion-item>
+    <ion-label position="stacked">Number</ion-label>
+    <ion-input (keypress)="preventTypingAlphabethCharacter($event)" type="" [(ngModel)]="phoneNumber"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label position="stacked">Number</ion-label>
-    <ion-input>{{ dataService.currentUser.phoneNumber }}</ion-input>
+    
+    <ion-button color="tertiary" (click)="updateNewPhoneNumberAndDisplayName()">Update</ion-button>
   </ion-item>
 
   <input 

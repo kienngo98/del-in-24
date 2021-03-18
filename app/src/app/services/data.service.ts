@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+  constructor(private localStorage: Storage) {
+
+  }
 
   // To store current user's information
   public currentUser: any = { 
@@ -17,6 +21,9 @@ export class DataService {
     receivedFiles: [],
     fullContactList: [],
   };
+
+  // Tells when user data is loaded
+  ALL_USER_DATA_LOADED:boolean = false;
 
   // Default avatar url for new account
   DEFAULT_AVATAR_URL: string = 'https://cdn0.iconfinder.com/data/icons/streamline-emoji-1/48/096-grinning-cat-face-256.png';
@@ -51,5 +58,6 @@ export class DataService {
     const otherUserUID = this.currentUser.fullContactList.find(user => user.email === email).uid;
     const documentUID = this.getChatDocumentIdFrom2Persons(otherUserUID, this.currentUser.uid);
     this.CURRENT_CONVERSATION_INDEX = this.CONVERSATION_LIST.findIndex(convo => convo.conversationId === documentUID);
+    this.localStorage.set('CURRENT_CONVERSATION_INDEX', this.CURRENT_CONVERSATION_INDEX);
   }
 }

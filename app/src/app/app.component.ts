@@ -24,6 +24,9 @@ export class AppComponent {
     this.loadDarkModeConfig();
     this.loadContactTipConfig();
 
+    // Load previous inbox index
+    this.loadPreviousConversationIndex();
+
     // Load user information (if already logged in)
     this.firebaseAuth.onAuthStateChanged(user => {
       if (user) {
@@ -47,24 +50,28 @@ export class AppComponent {
         });
         this.toast.presentSimpleToast('You have logged in');
 
-        // If on home page => Navigate into the app
-        // if (!this.router.url.includes('/app')) this.router.navigate(['/app/chat']);
-        this.router.navigate(['/app/chat']);
+        // If on home page and NOT in inbox page => Navigate into the Chat page
+        if (!this.router.url.includes('/app') && !this.router.url.includes('/inbox')) this.router.navigate(['/app/chat']);
       }
       else {
         // When logged out => Reset the currentUser variable
-        this.dataService.currentUser = { 
-          email: '', 
-          photoURL: '', 
-          uid: '',
-          displayName: '',
-          phoneNumber: '',
-          contacts: [],
-          sharedFiles: [],
-          receivedFiles: []
-        };
+        this.resetCachedDataOnLogginOut();
       }
     });
+  }
+
+  resetCachedDataOnLogginOut():void {
+    this.localStorage.set('CURRENT_CONVERSATION_INDEX', null);
+    this.dataService.currentUser = { 
+      email: '', 
+      photoURL: '', 
+      uid: '',
+      displayName: '',
+      phoneNumber: '',
+      contacts: [],
+      sharedFiles: [],
+      receivedFiles: []
+    };
   }
 
   async loadDarkModeConfig():Promise<any> {
@@ -79,6 +86,12 @@ export class AppComponent {
       const strValue = String(data);
       if (strValue === 'true') this.dataService.IS_SHOWING_CONTACT_TIPS = true;
       else if (strValue === 'false') this.dataService.IS_SHOWING_CONTACT_TIPS = false;
+    });
+  }
+
+  async loadPreviousConversationIndex():Promise<any> {
+    return this.localStorage.get('CURRENT_CONVERSATION_INDEX').then(data => {
+      if (!isNaN(data)) this.dataService.CURRENT_CONVERSATION_INDEX = Number(data);
     });
   }
 
@@ -104,6 +117,7 @@ export class AppComponent {
           }
           return conversation;
         });
+      this.dataService.ALL_USER_DATA_LOADED = true;
     });
   }
 }

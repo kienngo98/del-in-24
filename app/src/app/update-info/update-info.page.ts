@@ -15,7 +15,9 @@ export class UpdateInfoPage implements OnInit {
   uploadImageURL: string = '../../assets/images/upload-option.png';
   currentUserImage: string = this.dataService.currentUser.photoURL;
   isUploadingNewPhoto: boolean = false;
-
+  phoneNumber:string = '';
+  displayName:string = '';
+  
   constructor(
     private firebase: FirebaseApp,
     private modalCtrl: ModalController,
@@ -26,7 +28,8 @@ export class UpdateInfoPage implements OnInit {
   ) {}
 
   ngOnInit() {
-
+    this.phoneNumber = this.dataService.currentUser.phoneNumber;
+    this.displayName = this.dataService.currentUser.displayName;
   }
 
   dismissUpdateForm() {
@@ -76,5 +79,19 @@ export class UpdateInfoPage implements OnInit {
       .catch(err => {
         console.log(err);
       });
+  }
+
+  preventTypingAlphabethCharacter(event:any):void {
+    const pattern = /[0-9.,]/;
+    let inputChar = String.fromCharCode(event.charCode);
+    if (!pattern.test(inputChar)) {
+      // invalid character, prevent input
+      event.preventDefault();
+    }
+  }
+
+  updateNewPhoneNumberAndDisplayName() {
+    // Update to Fire Auth; if data is valid => Update that info to Firestore
+    
   }
 }
